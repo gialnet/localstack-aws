@@ -1,0 +1,24 @@
+
+services:
+  localstack:
+    image: localstack/localstack:latest
+    container_name: localstack-sqs
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=sqs
+      - DEBUG=1
+      - DATA_DIR=/var/lib/localstack/data
+      - PERSISTENCE=1
+      - DOCKER_HOST=unix:///var/run/podman/podman.sock
+      - AWS_DEFAULT_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+    volumes:
+      - ./init-scripts:/docker-entrypoint-initaws.d
+      - ./localstack-data:/var/lib/localstack/data
+      - /var/run/podman/podman.sock:/var/run/docker.sock:z
+
+volumes:
+  localstack-data:
+    driver: local
